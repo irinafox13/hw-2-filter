@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import React, { useState } from "react";
+import Portfolio from "./components/Portfolio";
+import ProjectList from "./components/ProjectList";
+import Toolbar from "./components/Toolbar";
 import './App.css';
 
 function App() {
+  const [project, setProject] = useState(Portfolio);
+
+  const filters = [...new Set(Portfolio.map((value) => value.category))];
+
+  const filterItem = (curcat) => {
+    const newProject = Portfolio.filter((newVal) => {
+      return newVal.category === curcat;
+    });
+    setProject(newProject);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="container-fluid">
+        <div className="row">
+          <Toolbar
+            filters={filters} 
+            selected={filterItem}
+            onSelectFilter={setProject}       
+          />
+          <ProjectList projects={project} />
+        </div>
+      </div>
+    </>
   );
 }
 
